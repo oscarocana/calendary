@@ -1,5 +1,12 @@
-import { uuid } from "drizzle-orm/gel-core";
+import { boolean, index, text, timestamp, uuid } from "drizzle-orm/gel-core";
 import { pgTable } from "drizzle-orm/pg-core";
+
+// reusable code block that automatically sets the timestamp when the row is created (defualts to the current time)
+const createdAt = timestamp("createdAt").notNull().defaultNow();
+
+// reusable code block that automatically updates the timestamp when the row is updated (defaults to the current time)
+const updatedAt = timestamp("updatedAt").notNull().defaultNow().$onUpdate(() => new Date());
+
 
 //Defines the events table schema
 export const EventTable = pgTable("events", {
@@ -9,4 +16,11 @@ export const EventTable = pgTable("events", {
     durationInMinutes: integer("duration_in_minutes").notNull(),
     clerkUserId: text("clerkUserId").notNull(),
     isActive: boolean("isActive").notNull.default(true),
-},)
+    createdAt,
+    updatedAt,
+
+},
+    (table) => ([
+        index("clerkUserIdIndex").on(table.clerkUserId),
+    ])
+);
