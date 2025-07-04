@@ -1,7 +1,14 @@
-import Image from "next/image";
+import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import LandingPage from './components/LandingPage';
 
-export default function Home() {
-  return (
-    <h1 className="font-bold text-5xl text-center" >Calendary App</h1>
-  );
+export default async function HomePage() {
+  
+  const user = await currentUser();
+  
+  // If the user is not authenticated, redirect to the landing page
+  if (!user) return <LandingPage />
+
+  // If the user is authenticated, redirect to the events page
+  return redirect('/events')
 }
