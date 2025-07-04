@@ -1,5 +1,4 @@
-import { boolean, index, text, timestamp, uuid } from "drizzle-orm/gel-core";
-import { pgTable } from "drizzle-orm/pg-core";
+import { pgTable, boolean, index, text, timestamp, uuid, integer } from "drizzle-orm/pg-core";
 
 // reusable code block that automatically sets the timestamp when the row is created (defualts to the current time)
 const createdAt = timestamp("createdAt").notNull().defaultNow();
@@ -15,7 +14,7 @@ export const EventTable = pgTable("events", {
     description: text("description"),
     durationInMinutes: integer("duration_in_minutes").notNull(),
     clerkUserId: text("clerkUserId").notNull(),
-    isActive: boolean("isActive").notNull.default(true),
+    isActive: boolean("isActive").notNull().default(true),
     createdAt,
     updatedAt,
 
