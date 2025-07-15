@@ -1,3 +1,5 @@
+import { DAYS_OF_WEEK } from "@/constants";
+import { relations } from "drizzle-orm";
 import { unique } from "drizzle-orm/gel-core";
 import { pgTable, boolean, index, text, timestamp, uuid, integer, pgEnum } from "drizzle-orm/pg-core";
 
@@ -34,6 +36,11 @@ export const ScheduleTable = pgTable("schedules", {
     updatedAt, 
 })
 
+export const scheduleRelationship = relations(ScheduleTable, ({ many }) => ({
+    availability: many(ScheduleAvailabilityTable),
+}));
+
+// Defines the scheduleDayOfWeekEnum, which is used to represent the days of the week in the scheduleAvailability table
 export const scheduleDayOfWeekEnum = pgEnum("day", DAYS_OF_WEEK)
 
 // Defines the scheduleAvailability table schema, which is used to store the availability for each user
