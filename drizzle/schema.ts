@@ -1,5 +1,5 @@
 import { unique } from "drizzle-orm/gel-core";
-import { pgTable, boolean, index, text, timestamp, uuid, integer } from "drizzle-orm/pg-core";
+import { pgTable, boolean, index, text, timestamp, uuid, integer, pgEnum } from "drizzle-orm/pg-core";
 
 // reusable code block that automatically sets the timestamp when the row is created (defualts to the current time)
 const createdAt = timestamp("createdAt").notNull().defaultNow();
@@ -33,6 +33,8 @@ export const ScheduleTable = pgTable("schedules", {
     createdAt,
     updatedAt, 
 })
+
+export const scheduleDayOfWeekEnum = pgEnum("day", DAYS_OF_WEEK)
 
 // Defines the scheduleAvailability table schema, which is used to store the availability for each user
 export const ScheduleAvailabilityTable = pgTable("scheduleAvailability", {
