@@ -43,5 +43,8 @@ export const ScheduleAvailabilityTable = pgTable("scheduleAvailability", {
     dayOfWeek: scheduleDayOfWeekEnum("dayOfWeek").notNull(),
     createdAt,
     updatedAt,
-}
+},
+ table => ([
+    index("scheduleIdIndex").on(table.scheduleId),
+ ])
 );
