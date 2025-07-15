@@ -1,5 +1,5 @@
 import { DAYS_OF_WEEK } from "@/constants";
-import { relations } from "drizzle-orm";
+import { One, relations } from "drizzle-orm";
 import { unique } from "drizzle-orm/gel-core";
 import { pgTable, boolean, index, text, timestamp, uuid, integer, pgEnum } from "drizzle-orm/pg-core";
 
@@ -36,6 +36,8 @@ export const ScheduleTable = pgTable("schedules", {
     updatedAt, 
 })
 
+// Defines the relationship between the ScheduleTable and the ScheduleAvailabilityTable
+// This relationship allows us to query the availability for each schedule
 export const scheduleRelationship = relations(ScheduleTable, ({ many }) => ({
     availability: many(ScheduleAvailabilityTable),
 }));
@@ -57,3 +59,12 @@ export const ScheduleAvailabilityTable = pgTable("scheduleAvailability", {
     index("scheduleIdIndex").on(table.scheduleId),
  ])
 );
+
+// Defines the relationship between the ScheduleAvailabilityTable and the ScheduleTable
+// This relationship allows us to query the schedule for each availability
+export const scheduleAvailabilityRelationship = relations(ScheduleAvailabilityTable, ({ one }) => ({
+    schedule: one(ScheduleTable, {
+        fields: [ScheduleAvailabilityTable.scheduleId],
+        references: [ScheduleTable.id], // this is the foreign key relationship
+    }),
+}));
