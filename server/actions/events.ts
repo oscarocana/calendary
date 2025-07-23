@@ -59,3 +59,29 @@ export async function updateEvent(
         redirect("/events") // Redirects the user to the events page after event update
     }
 }
+
+export async function deleteEvent(
+    id: string, // The ID of the event to update
+): Promise<void> {
+    try {
+        const { userId } = await auth() // Authenticates the user and retrieves their ID
+        if (!userId) {
+            throw new Error("User not authenticated");
+        }
+
+        // If validation is successful, proceed to delete the event in the DB, ensuring it belongs to the userId
+        const { rowCount } = await db.delete(EventTable).where(and(eq(EventTable.id, id), eq(EventTable.clerkUserId, userId)))
+        
+        // Checks if the event exist 
+        if (rowCount === 0) {
+            throw new Error("Event not found or you do not have permission to delete it");
+        }
+    
+    } catch (err: any) {
+        // If any error occurs, throws a new error with a message
+        throw new Error(`Failed to delete event: ${err.message || err}`);
+    } finally {
+        revalidatePath("/events") // Revalidates the path to ensure the latest data is fetched from the server
+        redirect("/events") // Redirects the user to the events page after event update
+    }
+}
