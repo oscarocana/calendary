@@ -12,25 +12,21 @@ import z from "zod";
 
 export async function createEvent(
     unsafeData: z.infer<typeof eventFormSchema> // The data type is inferred and validated from the Zod schema
-): Promise<void> {
-    try {
+): Promise<{error: boolean} | undefined> {
+    
         const { userId } = await auth() // Authenticates the user and retrieves their ID
         const {success, data} = eventFormSchema.safeParse(unsafeData); // Validates the data against the eventFormSchema
         if (!success || !userId) {
-            throw new Error("Invalid event data or user not authenticated");
+            return {error: true}
         }
 
         // If validation is successful, proceed to insert the event into the DB, linking it to the userId
         await db.insert(EventTable).values({...data, clerkUserId: userId}) 
-    } catch (err: any) 
-    {
-        // If any error occurs, throws a new error with a message
-        throw new Error(`Failed to create event: ${err.message || err}`);
-    } finally {
+    
         revalidatePath("/events") // Revalidates the path to ensure the latest data is fetched drom the server
         redirect("/events") // Redirects the user to the events page after event creation
-    }
 }
+
 
 export async function updateEvent(
     id: string, // The ID of the event to update
