@@ -21,7 +21,7 @@ export async function createEvent(
         }
 
         // If validation is successful, proceed to insert the event into the DB, linking it to the userId
-        db.insert(EventTable).values({...data, clerkUserId: userId}) 
+        await db.insert(EventTable).values({...data, clerkUserId: userId}) 
     } catch (err: any) 
     {
         // If any error occurs, throws a new error with a message
