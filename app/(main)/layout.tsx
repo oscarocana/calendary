@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
-import PubllicNavBar from "../components/PublicNavBar";
-import PriavteNavBar from "../components/PrivateNavBar";
+import PubllicNavBar from "../../components/PublicNavBar";
+import PriavteNavBar from "../../components/PrivateNavBar";
 
 export default async function Mainlayout({
   children,
