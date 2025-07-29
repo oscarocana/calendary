@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { eventFormSchema } from "@/schema/events"
 import { zodResolver } from "@hookform/resolvers/zod"
