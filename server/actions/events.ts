@@ -98,4 +98,13 @@ export async function getEvents(clerkUserId: string): Promise<EventRow[]> {
   })
     // Returns the full list of events
     return events
+} 
+
+export async function getEvent(eventId: string, UserId: string): Promise<EventRow | undefined> {
+    const event = await db.query.EventTable.findFirst({
+        // Filters the event by its ID and the authenticated user's ID
+        where: ({ id, clerkUserId }, { and, eq }) => and(eq(id, eventId), eq(clerkUserId, UserId)),
+    })
+    // Returns the event if found, otherwise undefined
+    return event ?? undefined;
 }
