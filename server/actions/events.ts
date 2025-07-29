@@ -100,10 +100,10 @@ export async function getEvents(clerkUserId: string): Promise<EventRow[]> {
     return events
 } 
 
-export async function getEvent(eventId: string, UserId: string): Promise<EventRow | undefined> {
+export async function getEvent(userId: string, eventId: string): Promise<EventRow | undefined> {
     const event = await db.query.EventTable.findFirst({
         // Filters the event by its ID and the authenticated user's ID
-        where: ({ id, clerkUserId }, { and, eq }) => and(eq(id, eventId), eq(clerkUserId, UserId)),
+        where: ({ id, clerkUserId }, { and, eq }) =>  and(eq(clerkUserId, userId), eq(id, eventId)),
     })
     // Returns the event if found, otherwise undefined
     return event ?? undefined;
