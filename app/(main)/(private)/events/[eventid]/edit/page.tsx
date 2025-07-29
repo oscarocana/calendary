@@ -1,7 +1,9 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import EventForm from "@/components/ui/forms/EventForms"
 import { getEvent } from "@/server/actions/events"
 import { auth } from "@clerk/nextjs/server"
+
 
 // The default exported async function for the EditEventPage
 export default async function EditEventPage({
@@ -18,17 +20,22 @@ export default async function EditEventPage({
   const event = await getEvent( userId,eventId )
   if(!event) return <h1>Event not found</h1>
 
-    // Render the page with a card layout, displaying the "Edit Event" form
+ // Debug logging
+  console.log("Event data:", event);
+
+  // Render the page with a card layout, displaying the "Edit Event" form
   return (
-    <Card className="max-w-md mx-auto border-4 border-blue-100 shadow-2xl shadow-accent-foreground">
+    <Card className="max-w-md mx-auto border-4 border-blue-100 shadow-2xl shadow-accent-foreground mt-32">
       <CardHeader>
         <CardTitle>Edit Event</CardTitle>
       </CardHeader>
       <CardContent>
+        <div>Test</div>
         {/* Render the EventForm with the event details, passing the event data as props */}
         <EventForm
           event={{ ...event, description: event.description || undefined }} // If description is null, pass undefined
         />
+        <div>tes2</div>
       </CardContent>
     </Card>
   )
