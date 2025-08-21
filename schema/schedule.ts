@@ -1,5 +1,6 @@
 import { DAYS_OF_WEEK } from "@/constants";
-import z from "zod";
+import { timeToFloat } from "@/lib/utils";
+import { z } from "zod";
 
 export const scheduleFormSchema = z.object({
     timezone: z.string().min(1, "Timezone is required"),
@@ -10,15 +11,31 @@ export const scheduleFormSchema = z.object({
         dayOfWeek: (z.enum(DAYS_OF_WEEK)),
         })
     )
+})
     // Code to ensure that startTime is before endTime and there are no overlapping availabilities
-
-    .superRefine((availabilities, ctx) => {
-        availabilities.forEach((availability, index) => {
-            const overlaps = availabilities.some((a, i) => {
+    .superRefine((data, ctx) => {
+        data.availabilities.forEach((availability, index) => {
+            const overlaps = data.availabilities.some((a, i) => {
                 return (
                     i !== index && a.dayOfWeek === availability.dayOfWeek &&
                     timeToFloat(a.startTime) < timeToFloat(availability.endTime) &&
                     timeToFloat(a.endTime) > timeToFloat(availability.startTime)
                 )
             })
-    });
+            if (overlaps) {
+                ctx.addIssue({
+                    code: "custom",
+                    message: "Availabilities cannot overlap one another",
+                    path: ["availabilities", index, "startTime"]
+                })
+            }
+            
+            if (timeToFloat(availability.startTime) >= timeToFloat(availability.endTime)) {
+                ctx.addIssue({
+                    code: "custom",
+                    message: "Start time must be before end time",
+                    path: ["availabilities", index, "endTime"]
+                })
+            }
+        })
+    })
