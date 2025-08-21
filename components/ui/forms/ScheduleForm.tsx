@@ -204,11 +204,15 @@ const {
                             </Fragment>
                             ))}
                     </div>      
-            
-            
-            
-            
+                        {/* Submit button to save the schedule */}
+                        <div className="flex gap-2 justify-start">
+                        <Button 
+                        className="cursor-pointer hover:scale-105 bg-blue-400 hover:bg-blue-600"
+                        disabled={form.formState.isSubmitting}
+                        type="submit">
+                        Save
+                        </Button>
+                    </div>
             </form>
-
         </form>
 )}
