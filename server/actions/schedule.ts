@@ -7,7 +7,7 @@ type ScheduleRow = typeof ScheduleTable.$inferSelect
 type AvailabilityRow = typeof ScheduleAvailabilityTable.$inferSelect
 
 export type FullSchedule = ScheduleRow & {
-  availabilities: AvailabilityRow[]}
+  availability: AvailabilityRow[]}
 
   export async function getSchedule(userId: string): Promise<FullSchedule> {
   // Queries the ScheduleTable for the first record that matches the user's ID
@@ -19,7 +19,7 @@ export type FullSchedule = ScheduleRow & {
   })
 
   // Return the schedule if found, or null if it doesn't exist
-  return schedule as FullSchedule | null
+  return schedule as FullSchedule
 }
 
     
