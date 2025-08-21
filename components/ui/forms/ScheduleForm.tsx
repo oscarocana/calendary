@@ -5,21 +5,23 @@ import { timeToFloat } from "@/lib/utils";
 import { scheduleFormSchema } from "@/schema/schedule";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import z from "zod";
 
-type availability = {
-    startTime: string;
-    endTime: string;
-    daysOfWeek: (typeof DAYS_OF_WEEK )[number];
+type Availability = {
+    startTime: string
+    endTime: string
+    dayOfWeek: (typeof DAYS_OF_WEEK )[number];
     };
 
-export function ScheduleForm({ schedule }) {
+export function ScheduleForm({
     schedule,
-}:{
+}:  {
     schedule?: {
         timezone: string;
-        availabilities: availabilities[];
+        availabilities: Availability[];
     };
-}) {
+})
+ {
     //initializing the form with Zod using the ScheduleFormSchema
     const form = useForm<z.infer<typeof scheduleFormSchema>>({
         resolver: zodResolver(scheduleFormSchema),
@@ -29,13 +31,14 @@ export function ScheduleForm({ schedule }) {
                 return timeToFloat(a.startTime) - timeToFloat(b.startTime);
             }),
             },    
-        },
     });
 
     return (
         <form {...form}>
 
-            <form>
+            <form
+            className="flex gap-4 flex-col"
+            onSubmit={form.handleSubmit(onSubmit)}>
 
 
 
